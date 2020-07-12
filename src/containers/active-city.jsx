@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
 
 
 class ActiveCty extends Component {
@@ -7,14 +9,24 @@ class ActiveCty extends Component {
   }
 
   render() {
+    if (this.props.selectedCity === null) {
+      return null;
+    }
     return (
       <div className="active-city">
-        <h3>{this.props.activeCity.name}</h3>
-        <div>{this.props.activeCity.address}</div>
-        <img src={`https://kitt.lewagon.com/placeholder/cities/${this.props.activeCity.slug}`} alt=""/>
+        <h3>{this.props.selectedCity.name}</h3>
+        <div>{this.props.selectedCity.address}</div>
+        <img src={`https://kitt.lewagon.com/placeholder/cities/${this.props.selectedCity.slug} `} alt="" />
       </div>
     );
   }
 }
 
-export default ActiveCty;
+function mapReduxStateToProps(reduxState) {
+  console.log(reduxState.city);
+  return {
+    selectedCity: reduxState.selectedCity
+  };
+}
+
+export default connect(mapReduxStateToProps)(ActiveCty);

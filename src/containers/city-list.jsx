@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+
+import { setCities } from '../actions';
 
 import City from './city';
 
@@ -7,15 +11,27 @@ class CityList extends Component {
     super(props);
   }
 
-  selectCity = (cityIndex) => {
-    this.props.changeActiveCity(cityIndex);
+  componentWillMount() {
+    this.props.setCities();
   }
 
   render() {
-    return (this.props.cities.map((city, index) => {
-      return (<City name={city.name} index={index} selectCity={this.selectCity} key={city.slug}/>);
+    return (this.props.cities.map((city) => {
+      return (<City city={city} key={city.slug} />);
     }));
   }
 }
 
-export default CityList;
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(
+    { setCities: setCities },
+    dispatch);
+}
+
+function mapReduxStateToProps(reduxState) {
+  return {
+    cities: reduxState.cities
+  };
+}
+
+export default connect(mapReduxStateToProps, mapDispatchToProps)(CityList);

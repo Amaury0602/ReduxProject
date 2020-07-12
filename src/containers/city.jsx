@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
+import { selectCity } from '../actions';
 
 class City extends Component {
   constructor(props) {
@@ -7,12 +10,25 @@ class City extends Component {
   }
 
   handleClick = () => {
-    this.props.selectCity(this.props.index);
+    this.props.selectCity(this.props.city);
   }
 
   render() {
-    return (<div className="list-group-item" index={this.props.index} onClick={this.handleClick}>{this.props.name}</div>);
+    return (<div className="list-group-item" onClick={this.handleClick}>{this.props.city.name}</div>);
   }
 }
 
-export default City;
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(
+    { selectCity: selectCity },
+    dispatch);
+}
+
+function mapReduxStateToProps(reduxState) {
+  console.log(reduxState.city);
+  return {
+    selectedCity: reduxState.selectedCity
+  };
+}
+
+export default connect(mapReduxStateToProps, mapDispatchToProps)(City);
